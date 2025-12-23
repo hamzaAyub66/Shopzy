@@ -20,7 +20,7 @@ const RenderOrderDetailsText = ({
 }: {
   title: string;
   value: number;
-}): JSX.Element => {
+}): React.ReactNode => {
   return (
     <>
       <FlexContainer direction="row" position="rowBetween">
@@ -103,10 +103,10 @@ export default ({navigation}: CartScreenProps) => {
             title="Subtotal"
             value={getTotalCartPrice()}
           />
-          <RenderOrderDetailsText title="Delivery" value={DELIVERY_COST} />
+          {/* <RenderOrderDetailsText title="Delivery" value={DELIVERY_COST} /> */}
           <RenderOrderDetailsText
             title="Total"
-            value={getTotalCartPrice() + DELIVERY_COST}
+            value={getTotalCartPrice()}
           />
           <Spacer space={30} />
           <AppButton onPress={() => alert('Handle checkout!')}>

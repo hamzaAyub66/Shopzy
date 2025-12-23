@@ -15,7 +15,7 @@ type FavoritesScreenProps = BottomTabScreenProps<
   'FavoritesScreen'
 >;
 
-export default ({navigation}: FavoritesScreenProps): JSX.Element => {
+export default ({navigation}: FavoritesScreenProps): React.ReactNode => {
   const store = useCartStore();
 
   const navigateToProductDetails = (product: ProductType) => {

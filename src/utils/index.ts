@@ -5,7 +5,7 @@ const isAndroid: boolean = Platform.OS === 'android';
 enum AppColors {
   PrimaryBlue = '#2A4BA0',
   DarkBlue = '#153075',
-  PrimaryYellow = '#F9B023',
+  PrimaryYellow = '#E18735',
   PureWhite = '#FFF',
   Grey = '#B2BBCE',
   PureBlack = '#000000',

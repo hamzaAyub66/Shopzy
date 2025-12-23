@@ -123,11 +123,11 @@ export default () => {
         component={FavoritesScreen}
         options={bottomTabScreenOptions}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="MoreScreen"
         component={MoreScreen}
         options={bottomTabScreenOptions}
-      />
+      /> */}
     </BottomTab.Navigator>
   );
 };

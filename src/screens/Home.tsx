@@ -18,30 +18,51 @@ import {SearchIcon} from '@assets/svg';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {RefreshControl, StyleSheet, TextInput, View} from 'react-native';
+import {RefreshControl, StyleSheet, TextInput, View , Image } from 'react-native';
 
 type HomeScreenProps = BottomTabScreenProps<AppScreensParamsList, 'HomeScreen'>;
 
-export default ({navigation}: HomeScreenProps): JSX.Element => {
-  const [productList, setProductList] = useState<ProductType[]>();
+export default ({navigation}: HomeScreenProps): React.ReactNode => {
+  const [productList, setProductList] = useState<ProductType[]>([]);
 
   const store = useCartStore();
   const isFocused = useIsFocused();
 
+  // ✅ UPDATED WooCommerce API Integration
   const getProductsList = async () => {
     try {
-      const res = await fetch('https://dummyjson.com/products');
+      const res = await fetch(
+        'https://drshawarma.co.uk/wp-json/wc/v3/products?per_page=100&consumer_key=ck_7ea1b661e677d7e9a8e49399f9b3645b5770eaae&consumer_secret=cs_d129aa6990ef4326dc5dab98de2e007e6265be87'
+      );
+
       const data = await res.json();
 
-      if (Array.isArray(data.products) && data.products.length) {
-        const updatedProducts = data.products.map((product: ProductType) => {
-          return {
-            ...product,
-            isFavorite: store.favorites.some(
-              favorite => favorite.id === product.id
-            ),
-          };
-        });
+      if (Array.isArray(data) && data.length) {
+      const updatedProducts = data.map((product: any) => {
+      const imageUrl = product.images?.[0]?.src || "";
+
+      return {
+        id: product.id,
+        title: product.name,
+        description: product.description || "",
+        price: Number(product.price),
+
+        discountPercentage: 0,
+        rating: Number(product.average_rating || 0),
+
+        stock: product.stock_status === "instock" ? 1 : 0,
+        brand: "",
+
+        category: product.categories?.[0]?.name || "",
+
+        thumbnail: imageUrl, // IMPORTANT
+        images: product.images?.map((img: any) => img.src) || [], // must be string[]
+
+        isFavorite: store.favorites.some(fav => fav.id === product.id),
+      };
+    });
+
+
         setProductList(updatedProducts);
       }
     } catch (error) {
@@ -53,7 +74,6 @@ export default ({navigation}: HomeScreenProps): JSX.Element => {
     navigation.navigate('ProductDetails', {product});
   };
 
-  // This could have been a reusable function, but giving a function more than 2 params isn't a good practice, so repeating it makes sense.
   const handleOnAddToCart = (
     product: ProductType,
     isProductInCart: boolean
@@ -71,18 +91,29 @@ export default ({navigation}: HomeScreenProps): JSX.Element => {
     <>
       <View style={styles.extendedHeader}>
         <FlexContainer position="rowBetween" direction="row">
-          <AppText
+          {/* <AppText
             style={{fontSize: 22}}
             color="PureWhite"
             fontFamily="ManropeSemiBold">
             Hey, Rahul
-          </AppText>
+          </AppText> */}
+          <Image
+              source={require('../../assets/images/logo.png')}  // <-- your logo path here
+              style={{
+                width: 120,
+                height: 80,
+                resizeMode: 'contain',
+              }}
+            />
+
           <CartButtonWithIndicator
             quantity={store.cart.length || 0}
             onPress={() => navigation.navigate('Cart')}
           />
         </FlexContainer>
-        <Spacer space={35} />
+
+        <Spacer space={30} />
+
         <View style={styles.searchInput}>
           <SearchIcon height={18} width={18} />
           <Spacer space={12} between />
@@ -92,8 +123,10 @@ export default ({navigation}: HomeScreenProps): JSX.Element => {
             placeholder="Search Products or store"
           />
         </View>
-        <Spacer space={35} />
-        <FlexContainer position="rowBetween" direction="row">
+
+        {/* <Spacer space={35} /> */}
+
+        {/* <FlexContainer position="rowBetween" direction="row">
           <DropdownSelector
             title="Delivery to"
             selectedValue="Green Way 3000, Sylhet"
@@ -104,23 +137,25 @@ export default ({navigation}: HomeScreenProps): JSX.Element => {
             selectedValue="1 Hour"
             onPress={value => alert(value)}
           />
-        </FlexContainer>
+        </FlexContainer> */}
       </View>
-      <Spacer space={27} />
 
-      {/* Showing only 5 products on purpose. */}
-      <HorizontalBannerList
-        list={productList?.slice(0, 5)}
+      <Spacer space={10} />
+
+      {/* Only first 5 banners */}
+      {/* <HorizontalBannerList
+        list={productList.slice(0, 5)}
         onPress={navigateToProductDetails}
-      />
+      /> */}
 
-      <Spacer space={27} />
-      {productList?.length ? (
+      <Spacer space={20} />
+
+      {productList.length > 0 && (
         <PaddingContainer style={{paddingVertical: 0}}>
-          <AppText fontSize="extraLarge">Recommended</AppText>
+          {/* <AppText fontSize="extraLarge">Products</AppText> */}
           <Spacer space={20} />
         </PaddingContainer>
-      ) : null}
+      )}
     </>
   );
 
@@ -135,10 +170,10 @@ export default ({navigation}: HomeScreenProps): JSX.Element => {
       fillHeight>
       <ProductGridList
         ListHeaderComponent={ListHeaderComponent}
-        productList={productList?.length ? productList : []}
+        productList={productList}
         refreshControl={
           <RefreshControl
-            refreshing={productList?.length === 0}
+            refreshing={productList.length === 0}
             onRefresh={getProductsList}
             tintColor={AppColors.PrimaryBlue}
           />
