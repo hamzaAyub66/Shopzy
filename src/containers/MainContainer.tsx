@@ -16,10 +16,10 @@ export default ({
   style,
   fillHeight,
   backgroundColor,
-}: MainContainerProps): JSX.Element => {
+}: MainContainerProps): React.ReactNode => {
   return (
     <SafeAreaView
-      edges={['top', 'left', 'right']}
+      edges={['top', 'left', 'right', 'bottom']}      
       style={{
         flex: fillHeight ? 1 : undefined,
         backgroundColor: backgroundColor || AppColors.PureWhite,

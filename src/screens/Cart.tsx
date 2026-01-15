@@ -50,6 +50,23 @@ export default ({navigation}: CartScreenProps) => {
     return totalCartPrice;
   };
 
+  const handleProceedToCheckout = () => {
+    const subtotal = getTotalCartPrice();
+    const total = subtotal; // Add delivery cost here if needed
+    
+    // Construct the order object
+    const orderData = {
+      items: store.cart,
+      subtotal: subtotal,
+      total: total,
+      orderDate: new Date().toISOString(),
+      // Add any other details like tax or delivery cost here
+    };
+
+    // ✅ 2. Navigate to InvoiceScreen with the 'order' param
+    navigation.navigate('InvoiceScreen', { order: orderData });
+  };
+
   return (
     <MainContainer style={{paddingHorizontal: 0}} fillHeight>
       <PaddingContainer>
@@ -109,7 +126,7 @@ export default ({navigation}: CartScreenProps) => {
             value={getTotalCartPrice()}
           />
           <Spacer space={30} />
-          <AppButton onPress={() => alert('Handle checkout!')}>
+          <AppButton onPress={handleProceedToCheckout}>
             Proceed To checkout
           </AppButton>
         </PaddingContainer>

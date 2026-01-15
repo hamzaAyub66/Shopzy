@@ -6,6 +6,11 @@ type AppScreensParamsList = {
   ProductDetails: {product: ProductType};
   Cart: undefined;
   BottomNavBar: undefined;
+  CategoryProductsScreen: {
+    categoryId: number;
+    categoryName: string;
+  };
+  InvoiceScreen: { order: any };
 };
 
 type ProductType = {

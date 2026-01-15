@@ -1,5 +1,6 @@
 import Cart from './Cart';
 import Categories from './Categories';
+import CategoryProductsScreen from './CategoryProducts';
 import Favorites from './Favorites';
 import Home from './Home';
 import More from './More';
@@ -9,7 +10,8 @@ export {
   Home as HomeScreen,
   Categories as CategoriesScreen,
   Favorites as FavoritesScreen,
-  More as MoreScreen,
+  // More as MoreScreen,
   ProductDetails as ProductDetailsScreen,
   Cart as CartScreen,
+  CategoryProductsScreen as CategoryProductsScreen,
 };

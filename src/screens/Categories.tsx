@@ -59,7 +59,13 @@ const CategoriesScreen = ({navigation}: CategoriesScreenProps): React.ReactNode 
     <TouchableOpacity
       activeOpacity={0.7}
       style={styles.categoryCard}
-      onPress={() => alert(`Selected: ${item.name}`)}>
+      onPress={() =>
+        navigation.navigate("CategoryProductsScreen", {
+          categoryId: item.id,
+          categoryName: item.name,
+        })
+      }
+      >
       
       <View style={styles.iconCircle}>
         <AppText color="PrimaryBlue" fontFamily="ManropeBold">

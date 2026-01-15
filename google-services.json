@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229057366818",
+    "project_id": "dr-shawarma-b373b",
+    "storage_bucket": "dr-shawarma-b373b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229057366818:android:99ba05758398125d75b37b",
+        "android_client_info": {
+          "package_name": "com.shopzy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA82bf7QHEHMeJdOJyhRBNkY7kJU5goARQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

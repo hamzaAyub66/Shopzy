@@ -5,7 +5,7 @@ import {
   CategoriesScreen,
   FavoritesScreen,
   HomeScreen,
-  MoreScreen,
+  // MoreScreen,
 } from '@app/screens';
 import {AppScreensParamsList} from '@app/types';
 import {AppColors, isAndroid} from '@app/utils';
@@ -22,6 +22,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const BottomTab = createBottomTabNavigator<AppScreensParamsList>();
 
@@ -52,8 +53,17 @@ const RenderTabIcon = ({isFocused, index, label}: TabIconProps) => {
 };
 
 const BottomTabBar = ({state, navigation}: BottomTabBarProps) => {
+  const insets = useSafeAreaInsets();
+  
   return (
-    <View style={styles.bottomTab}>
+    <View style={[
+      styles.bottomTab, 
+      { 
+        // Remove fixed height and use padding + inset
+        height: (isAndroid ? 70 : 80) + insets.bottom, 
+        paddingBottom: insets.bottom // This pushes icons above the home bar
+      }
+    ]}>
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const tabBarLabel =
@@ -63,7 +73,7 @@ const BottomTabBar = ({state, navigation}: BottomTabBarProps) => {
             ? 'Categories'
             : route.name === 'FavoritesScreen'
             ? 'Favorites'
-            : 'More';
+            : '';
 
         const onPress = () => {
           const event = navigation.emit({
@@ -123,11 +133,6 @@ export default () => {
         component={FavoritesScreen}
         options={bottomTabScreenOptions}
       />
-      {/* <BottomTab.Screen
-        name="MoreScreen"
-        component={MoreScreen}
-        options={bottomTabScreenOptions}
-      /> */}
     </BottomTab.Navigator>
   );
 };
