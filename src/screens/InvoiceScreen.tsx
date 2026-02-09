@@ -7,7 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppScreensParamsList } from '@app/types';
 import { ArrowIcon } from '@assets/svg';
 import * as Print from 'expo-print';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const generateInvoiceHTML = (order: any) => {
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
@@ -129,8 +129,9 @@ type InvoiceScreenProps = NativeStackScreenProps<AppScreensParamsList, 'InvoiceS
 
 export default ({ route, navigation }: InvoiceScreenProps): React.ReactNode => {
   const { order } = route.params;
-
-  const formatDate = (dateString: string) => {
+  const insets = useSafeAreaInsets(); // Get Safe Area dimensions
+  
+const formatDate = (dateString: string) => {
   if (!dateString) return '';
   
   const date = new Date(dateString);
@@ -219,7 +220,10 @@ const printInvoice = async () => {
       </ScrollView>
 
       {/* Fixed Button Footer */}
-      <View style={styles.buttonWrapper}>
+      <View style={[
+        styles.footer, 
+        { paddingBottom: insets.bottom > 0 ? insets.bottom : 20 } // Ensure it clears the Home Bar
+      ]}>
         <TouchableOpacity 
           style={styles.printButton} 
           onPress={printInvoice}>
@@ -286,22 +290,22 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: '#999',
   },
-  buttonWrapper: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: AppColors.PureWhite,
-    paddingHorizontal: 20,
-    paddingVertical: 15, // SafeAreaView 'bottom' edge handles the extra space now
-    borderTopWidth: 1,
-    borderTopColor: '#EEEEEE',
-    elevation: 5, // Ensures it sits above the scroll content on Android
-  },
+
   printButton: {
     backgroundColor: AppColors.PrimaryBlue,
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',
   },
+  footer: {
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    backgroundColor: AppColors.PureWhite,
+    // Add shadow to make it look like it's floating above content
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: -3 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 5,
+  }
 });
